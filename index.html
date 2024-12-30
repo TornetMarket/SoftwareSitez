@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetWreckr</title>
+    <style>
+        /* CSS Styles */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #1c1c1c; /* Dark gray close to black */
+            color: #ffffff; /* White text */
+        }
+
+        .navbar {
+            background-color: #0a2a43; /* Darkish blue color */
+            padding: 15px;
+            display: flex;
+            justify-content: center; /* Center the title horizontally */
+            align-items: center; /* Center the title vertically */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5); /* Optional shadow for depth */
+            position: relative; /* For additional flexibility */
+        }
+
+        .navbar-title {
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin: 0;
+        }
+
+        /* END PROCESS button styling */
+        .end-process-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: #ff5c5c; /* Red button */
+            color: #ffffff; /* White text */
+            padding: 8px 16px; /* Smaller padding for a smaller button */
+            font-size: 14px; /* Smaller font size */
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            display: none; /* Initially hidden */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Subtle shadow for depth */
+            transition: all 0.3s ease; /* Smooth transition */
+        }
+
+        .end-process-btn:hover {
+            background-color: #ff3b3b; /* Slightly darker red on hover */
+            transform: translateY(-2px); /* Button lifts up slightly */
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4); /* Stronger shadow on hover */
+        }
+
+        /* Terminal window */
+        .terminal-window {
+            display: none; /* Initially hidden */
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            background-color: #000000; /* Black background */
+            color: #00ff00; /* Green text */
+            font-family: 'Courier New', Courier, monospace;
+            padding: 20px;
+            overflow-y: auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.8); /* Shadow effect */
+        }
+
+        .main-content {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .category {
+            margin: 40px 0;
+            position: relative;
+        }
+
+        .category-line {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .category-line::before,
+        .category-line::after {
+            content: '';
+            flex: 1;
+            border-top: 2px solid #64ffda; /* Accent color */
+        }
+
+        .category-line span {
+            margin: 0 15px;
+            color: #64ffda; /* Accent color */
+            font-weight: bold;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .button {
+            background-color: #64ffda; /* Accent color */
+            color: #1c1c1c;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 8px; /* Rounded corners */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Subtle shadow for depth */
+            transition: all 0.3s ease; /* Smooth transition for all properties */
+        }
+
+        .button:hover {
+            background-color: #52e0c4; /* Slightly darker accent */
+            transform: translateY(-4px); /* Button lifts up slightly */
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4); /* Stronger shadow on hover */
+        }
+
+        .button:active {
+            background-color: #08324a; /* Lighter shade of the navbar blue */
+            transform: translateY(2px); /* Button presses down when clicked */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Lighter shadow when pressed */
+            color: #ffffff; /* Change text color to white */
+        }
+
+        .active {
+            background-color: #08324a !important; /* Stay in the light blue color after click */
+            transform: none !important; /* Prevent button from moving down after being clicked */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3) !important; /* Keep shadow after click */
+            color: #ffffff; /* Change text color to white */
+        }
+
+        .button:focus {
+            outline: none; /* Remove outline on focus */
+        }
+
+                /* Footer Styling */
+        .footer {
+            background-color: #0a2a43; /* Dark blue background */
+            color: #ccd6f6; /* Light gray text */
+            text-align: center;
+            padding: 20px 0;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+            font-size: 14px;
+        }
+
+        .footer .trademark {
+            font-size: 16px;
+            color: #ff5c5c; /* Red color for the trademark */
+        }
+
+
+        /* Mobile responsiveness */
+        @media screen and (max-width: 768px) {
+            .navbar-title {
+                font-size: 18px; /* Adjust navbar title size */
+            }
+
+            .end-process-btn {
+                font-size: 12px; /* Smaller button text */
+                padding: 6px 12px; /* Smaller button size */
+            }
+
+            .main-content h1 {
+                font-size: 22px; /* Adjust main header size */
+            }
+
+            .button-container {
+                flex-direction: column; /* Stack buttons vertically */
+                gap: 10px; /* Reduce gap between buttons */
+            }
+
+            .button {
+                font-size: 14px; /* Smaller font size for buttons */
+                padding: 10px 20px; /* Adjust padding for smaller screens */
+            }
+
+            .category-line span {
+                font-size: 14px; /* Smaller category title */
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="navbar-title">NetWreckr</div>
+        <button class="end-process-btn" onclick="endProcess()">END PROCESS</button>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <h1>Ultimate Exploitation Suite</h1>
+        <p>Recon, Exploit, MITM... Pick Your Payload and Hack!</p>
+
+        <!-- Sniffing Category -->
+        <div class="category">
+            <div class="category-line">
+                <span>Sniffing</span>
+            </div>
+            <div class="button-container">
+                <button class="button" onclick="activateButton(this, 'IP')">IP</button>
+                <button class="button" onclick="activateButton(this, 'SSID')">SSID</button>
+                <button class="button" onclick="activateButton(this, 'WPA2-PSK')">WPA2-PSK</button>
+            </div>
+        </div>
+
+        <!-- MITM Category -->
+        <div class="category">
+            <div class="category-line">
+                <span>MITM Attacks</span>
+            </div>
+            <div class="button-container">
+                <button class="button" onclick="activateButton(this, 'ARP')">ARP</button>
+                <button class="button" onclick="activateButton(this, 'Evil Twin')">Evil Twin</button>
+                <button class="button" onclick="activateButton(this, 'DNS POISON')">DNS POISON</button>
+            </div>
+        </div>
+
+        <!-- Exploitation Category -->
+        <div class="category">
+            <div class="category-line">
+                <span>Private Network Exploits</span>
+            </div>
+            <div class="button-container">
+                <button class="button" onclick="activateButton(this, 'SMB')">SMB</button>
+                <button class="button" onclick="activateButton(this, 'RDP Brute')">RDP Brute</button>
+                <button class="button" onclick="activateButton(this, 'SSL Strip')">SSL Strip</button>
+            </div>
+        </div>
+
+        <!-- Public Network Exploitation -->
+        <div class="category">
+            <div class="category-line">
+                <span>Public Network Exploits</span>
+            </div>
+            <div class="button-container">
+                <button class="button" onclick="activateButton(this, 'Hijack')">Hijack</button>
+                <button class="button" onclick="activateButton(this, 'Blackout')">Blackout</button>
+                <button class="button" onclick="activateButton(this, 'Rootkit')">Rootkit</button>
+            </div>
+        </div>
+
+    </div>
+
+        <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 Provided By Tornet Market <span class="trademark">™</span> All rights reserved. </p>
+    </footer>
+
+
+    <!-- Terminal Window -->
+    <div class="terminal-window" id="terminal-window">
+        <p id="terminal-output"></p>
+    </div>
+
+    <script>
+        let processRunning = false;
+        let currentProcess = '';
+
+        // Function to activate a button
+        function activateButton(button, processName) {
+            if (processRunning) {
+                alert(`Process already running: ${currentProcess}. Please end the process first before continuing.`);
+                return;
+            }
+
+            // Start a new process
+            processRunning = true;
+            currentProcess = processName;
+            document.querySelector('.end-process-btn').style.display = 'block'; // Show the END PROCESS button
+
+            // Show the terminal window
+            document.querySelector('#terminal-window').style.display = 'block';
+
+            // Update terminal window with process details
+            document.querySelector('#terminal-output').textContent = `Process starting, ${processName}. Uploading data to Webhook...`;
+
+            // Highlight the clicked button
+            let categoryButtons = button.parentElement.querySelectorAll('.button');
+            categoryButtons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+            button.classList.add('active');
+        }
+
+        // Function to end the process
+        function endProcess() {
+            processRunning = false;
+            currentProcess = '';
+            document.querySelector('.end-process-btn').style.display = 'none'; // Hide the END PROCESS button
+
+            // Hide the terminal window
+            document.querySelector('#terminal-window').style.display = 'none';
+
+            // Remove the active class from all buttons
+            let allButtons = document.querySelectorAll('.button');
+            allButtons.forEach(button => {
+                button.classList.remove('active');
+            });
+        }
+
+        
+    </script>
+</body>
+</html>
